@@ -6,9 +6,12 @@ using UnityEngine;
 public class OnEventRaised : MonoBehaviour
 {
     public GameEvent Event;
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private void OnTriggerExit2D(Collider2D other)
     {
         
-        Event.Raise();
+        Event.Raise(); 
+        
+        
     }
 }

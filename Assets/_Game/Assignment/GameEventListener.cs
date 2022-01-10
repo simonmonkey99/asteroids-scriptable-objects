@@ -6,32 +6,34 @@ public class GameEventListener : MonoBehaviour
 {
    
     [SerializeField]
-    private Camera mainCam;
+    private Camera cam;
     
         public GameEvent Event;
-       
+        public GameObject ship;
 
         private void OnEnable()
-        { Event.RegisterListener(this); }
+        {
+            Event.RegisterListener(this);
+            
+        }
 
         private void OnApplicationQuit()
-        { Event.UnregisterListener(this); }
+        {
+            Debug.Log("quit");
+            Event.UnregisterListener(this);
+        }
 
         public void OnEventRaised()
         {
-
-
-            if (transform.position.x < 11.8f)
-            {
-                transform.position = new Vector3(37f,transform.position.y,0);
-            }
-            else if (transform.position.x > 37)
-            {
-                transform.position = new Vector3(11.8f,transform.position.y,0);
-            }
-            
-
+            Vector3 screenpoint = cam.WorldToScreenPoint(transform.position);
+            screenpoint = new Vector3(Screenwrap(screenpoint.x, cam.pixelWidth), Screenwrap(screenpoint.y, cam.pixelHeight), screenpoint.z);
+            transform.position = cam.ScreenToWorldPoint(screenpoint);
            
+        }
+        private float Screenwrap(float pos, float maxdist)
+        {
+            pos %= maxdist;
+            return pos < 0 ? pos + maxdist : pos;
         }
    
                
